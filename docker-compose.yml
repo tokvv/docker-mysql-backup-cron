@@ -4,6 +4,7 @@ backup:
   links:
     - db:mysql
   environment:
+    STORAGE_TYPE: s3
     BUCKET: s3://BUCKET/[PREFIX/]
     ACCESS_KEY: KEY
     SECRET_KEY: SECRET
