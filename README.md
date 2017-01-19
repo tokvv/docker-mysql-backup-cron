@@ -84,3 +84,8 @@ Use `docker exec <container> /backup.sh` to take an immediate backup.
 Use `docker exec <container> /restore.sh` to list available backups to restore
 from. Then `docker exec /restore.sh <filename of backup>` to
 restore it.
+
+# Revision History
+
+- 1.0.0
+  * Initial Release as of the forked version of `docker-mysql-backup-cron`
