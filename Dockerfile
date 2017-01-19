@@ -1,4 +1,4 @@
-FROM nickbreen/cron:v1.0.0
+FROM nickbreen/cron:v2.0.1
 
 MAINTAINER Nick Breen <nick@foobar.net.nz>
 
