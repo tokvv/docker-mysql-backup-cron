@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+for V in ${!CRON_D_*}
+do
+  ln -sf /etc/container_environment/$V /etc/cron.d/${V#CRON_D_}
+  # workaround for https://github.com/docker/docker/issues/11443 https://github.com/docker/docker/issues/12997
+  sed -i -e '$a\' /etc/cron.d/${V#CRON_D_}
+done
