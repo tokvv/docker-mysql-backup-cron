@@ -15,13 +15,25 @@ if [ -z "$1" ]
 then
 	case $STORAGE_TYPE in
 		s3)
-			s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION ls $BUCKET | grep .sql.gz
+			BUCKET_PREFIX=$BUCKET
+      if [ -n "$PREFIX" ]; then
+        BUCKET_PREFIX=$BUCKET/$PREFIX
+      fi
+      s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION ls $BUCKET_PREFIX | grep .sql.gz
 			;;
 	  swift)
-			swift list $CONTAINER | grep .sql.gz
+			FILE_PREFIX=""
+			if [ -n "$PREFIX" ]; then
+				FILE_PREFIX="--prefix ${PREFIX}"
+			fi
+			swift list $CONTAINER $FILE_PREFIX | grep .sql.gz
 			;;
 		local)
-			ls -la $BACKUP_DIR/ | grep .sql.gz
+			if [ -n "$PREFIX" ]; then
+        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename | grep $PREFIX
+      else
+        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename
+      fi
 			;;
 	esac
 
