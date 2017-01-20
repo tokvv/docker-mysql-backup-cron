@@ -38,7 +38,7 @@ The following environment variables must be provided.
 - `OS_AUTH_URL`
 - `CONTAINER`
 
-## Local Files System (`local`)
+## Local File System (`local`)
 
 The following environment variable must be provided.
 
@@ -85,7 +85,33 @@ Use `docker exec <container> /restore.sh` to list available backups to restore
 from. Then `docker exec /restore.sh <filename of backup>` to
 restore it.
 
+# Backup
+
+## File Name format
+
+```
+  2017-01-20-000252.sql.gz
+  `--+`-+`-+`---+--`---+--
+     |  |  |    |      +------- suffix
+     |  |  |    +-------------- time
+     |  |  +------------------- day
+     |  +---------------------- month
+     +------------------------- year
+```
+
+## Backup Cleanup Schedule and Behavior
+
+When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (disabled by default).
+
+| Interval | Description                        |
+|----------|------------------------------------|
+| Daily    | Retain the latest file 1 day ago and remove the oldest files if the number of backup files exceeds `MAX_DAILY_BACKUP_FILES`. |
+
+`MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
+
 # Revision History
+- 2.0.0
+  * Add backup cleaner (disabled by default)
 
 - 1.0.0
   * Initial Release as of the forked version of `docker-mysql-backup-cron`

@@ -8,43 +8,32 @@
 # Bailout if any command fails
 set -e
 
-case $STORAGE_TYPE in
-	s3)
-		if [ -z "$ACCESS_KEY" ] || [ -z "$SECRET_KEY" ] || [ -z "$BUCKET" ]; then
-			echo "[$STORAGE_TYPE] Cannot access to s3 with the given information"
-			exit 1
-		fi
-		;;
-  swift)
-		if [ -z "$OS_TENANT_NAME" ] || [ -z "$OS_USERNAME" ] || [ -z "$OS_PASSWORD" ] || [ -z "$CONTAINER" ] || [ -z "$OS_AUTH_URL" ]; then
-			echo "[$STORAGE_TYPE] Cannot access to swift with the given information"
-			exit 1
-		fi
-		;;
-	local)
-		if [ ! -d "$BACKUP_DIR" ]; then
-			echo "[$STORAGE_TYPE] Cannot backup to the missing directory"
-			exit 1
-		fi
-		;;
-	*)
-		echo "Unknown storage type => $STORAGE_TYPE. s3, swift or local is valid."
-		exit 1
-		;;
-esac
+. /_validate.sh
 
 # Check that a backup is specified or list all backups!
 if [ -z "$1" ]
 then
 	case $STORAGE_TYPE in
 		s3)
-			s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION ls $BUCKET | grep .sql.gz
+			BUCKET_PREFIX=$BUCKET
+      if [ -n "$PREFIX" ]; then
+        BUCKET_PREFIX=$BUCKET/$PREFIX
+      fi
+      s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION ls $BUCKET_PREFIX | grep .sql.gz
 			;;
 	  swift)
-			swift list $CONTAINER | grep .sql.gz
+			FILE_PREFIX=""
+			if [ -n "$PREFIX" ]; then
+				FILE_PREFIX="--prefix ${PREFIX}"
+			fi
+			swift list $CONTAINER $FILE_PREFIX | grep .sql.gz
 			;;
 		local)
-			ls -la $BACKUP_DIR/ | grep .sql.gz
+			if [ -n "$PREFIX" ]; then
+        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename | grep $PREFIX
+      else
+        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename
+      fi
 			;;
 	esac
 
@@ -58,7 +47,7 @@ else
 			s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION get $BUCKET$1 $DIR/$1
 			;;
 	  swift)
-			swift download $CONTAINER $1
+			swift download $CONTAINER $1 --output $DIR/$1
 			;;
 		local)
 			cp -f $BACKUP_DIR/$1 $DIR/$1
