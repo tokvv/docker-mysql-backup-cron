@@ -4,9 +4,9 @@ MAINTAINER Nick Breen <nick@foobar.net.nz>
 MAINTAINER Daisuke Baba
 
 RUN apt-get -qqy update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -qqy install mysql-client apache2-utils python-pip && \
+  DEBIAN_FRONTEND=noninteractive apt-get -qqy install mysql-client apache2-utils python-dev python-pip && \
   apt-get -qqy clean && \
-  pip install s3cmd python-swiftclient
+  pip install s3cmd python-openstackclient python-swiftclient
 
 ENV DBS="" MYSQL_HOST="mysql" STORAGE_TYPE="local" PREFIX="" DAILY_CLEANUP="0" MAX_DAILY_BACKUP_FILES="7"
 ENV ACCESS_KEY="" SECRET_KEY="" BUCKET="" REGION="us-east-1"

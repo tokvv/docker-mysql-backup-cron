@@ -5,13 +5,25 @@ function list_backup_files {
   rm -f ${TMP_OUT}
   case $STORAGE_TYPE in
     s3)
-      s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION ls $BUCKET > ${TMP_OUT}
+      BUCKET_PREFIX=$BUCKET
+      if [ -n "$PREFIX" ]; then
+        BUCKET_PREFIX=$BUCKET/$PREFIX
+      fi
+      s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION ls $BUCKET_PREFIX > ${TMP_OUT}
       ;;
     swift)
-      swift list $CONTAINER > ${TMP_OUT}
+      CONTAINER_PREFIX=""
+      if [ -n "$PREFIX" ]; then
+        CONTAINER_PREFIX="--prefix ${PREFIX}"
+      fi
+      swift list $CONTAINER $CONTAINER_PREFIX > ${TMP_OUT}
       ;;
     local)
-      ls ${BACKUP_DIR}/*.gz | xargs -n 1 basename > ${TMP_OUT}
+      if [ -n "$PREFIX" ]; then
+        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename | grep $PREFIX > ${TMP_OUT}
+      else
+        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename > ${TMP_OUT}
+      fi
       ;;
   esac
   LATEST_BACKUP=`cat ${TMP_OUT} | grep ${TS_PREFIX} | sort -r | head -1`

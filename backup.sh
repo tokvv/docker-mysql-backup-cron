@@ -41,7 +41,12 @@ case $STORAGE_TYPE in
 		;;
   swift)
 		# Upload the backups to Swift
-		swift upload $CONTAINER $DIR/
+		cd $DIR
+		for f in `ls *.sql.gz`
+		do
+			# Avoid Authorization Failure error
+			swift upload $CONTAINER ${f}
+		done
 		;;
 	local)
 	  # move the backup files in the temp directory to the backup directory
