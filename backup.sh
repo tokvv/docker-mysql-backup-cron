@@ -41,7 +41,8 @@ case $STORAGE_TYPE in
 		;;
   swift)
 		# Upload the backups to Swift
-		swift upload $CONTAINER $DIR/
+		cd $DIR
+		swift upload $CONTAINER .
 		;;
 	local)
 	  # move the backup files in the temp directory to the backup directory
