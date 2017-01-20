@@ -35,7 +35,7 @@ else
 			s3cmd --access_key=$ACCESS_KEY --secret_key=$SECRET_KEY --region=$REGION get $BUCKET$1 $DIR/$1
 			;;
 	  swift)
-			swift download $CONTAINER $1
+			swift download $CONTAINER $1 --output $DIR/$1
 			;;
 		local)
 			cp -f $BACKUP_DIR/$1 $DIR/$1
