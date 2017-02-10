@@ -110,6 +110,9 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
 `MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
 
 # Revision History
+- 2.1.0
+  * Add `--add-drop-database` to mysqldump
+
 - 2.0.0
   * Add backup cleaner (disabled by default)
 
