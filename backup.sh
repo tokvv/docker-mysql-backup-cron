@@ -22,6 +22,10 @@ DIR=$(mktemp -d)
 TS=$(date +%Y-%m-%d-%H%M%S)
 
 # Backup all databases, unless a list of databases has been specified
+BASE_DIR=`dirname ${DIR}/${PREFIX}test`
+if [ ! -d "$BASE_DIR" ]; then
+  mkdir -p $BASE_DIR
+fi
 if [ -z "$DBS" ]
 then
   # Backup all DB's in bulk
@@ -42,15 +46,23 @@ case $STORAGE_TYPE in
   swift)
     # Upload the backups to Swift
     cd $DIR
-    for f in `ls *.sql.gz`
+    for f in `find . -type f -name "*.sql.gz"`
     do
       # Avoid Authorization Failure error
       swift upload $CONTAINER ${f}
     done
     ;;
   local)
-    # move the backup files in the temp directory to the backup directory
-    mv $DIR/* $BACKUP_DIR/
+    # cp the backup files in the temp directory to the backup directory
+    cd $DIR
+    for f in `find . -type f -name "*.sql.gz" | grep "^./${PREFIX}"`
+    do
+      BASE_DIR=`dirname ${BACKUP_DIR}/${PREFIX}test`
+      if [ ! -d "${BASE_DIR}" ]; then
+        mkdir -p ${BASE_DIR}
+      fi
+      cp -f ${f} ${BASE_DIR}
+    done
     ;;
 esac
 
