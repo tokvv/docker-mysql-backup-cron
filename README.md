@@ -57,23 +57,25 @@ See docker-compose.yml for an example of configuration.
 Schedule UTC 1:00 am, 9:00 am and 5:00 pm per day.
 
 ```
-    docker run -ti --rm --name mysql-backup-cron \
-        --net nw_name_you_created \
-        -e MYSQL_ROOT_PASSWORD=root_password \
+    docker run -tid --name mysql-backup-cron \
+        --net my_network_name \
+        -e MYSQL_ROOT_PASSWORD=my_root_password \
         -e MYSQL_HOST=mysql_host \
         -e BACKUP_DIR=/backup \
+        -e PREFIX=subdir/here/with-prefix \
         -v $(pwd):/backup mysql-backup-cron
 ```
 
 Schedule every 5 minutes.
 
 ```
-    docker run -ti --rm --name mysql-backup-cron \
-        --net nw_MYACCOUNTID \
-        -e MYSQL_ROOT_PASSWORD=MYACCOUNTID_root \
-        -e MYSQL_HOST=egg_MYACCOUNTID_mysql \
+    docker run -tid --name mysql-backup-cron \
+        --net my_network_name \
+        -e MYSQL_ROOT_PASSWORD=my_root_password \
+        -e MYSQL_HOST=mysql_host \
         -e BACKUP_DIR=/backup \
         -e CRON_D_BACKUP="*/5 * * * * root /backup.sh | logger" \
+        -e PREFIX=subdir/here/with-prefix \
         -v $(pwd):/backup mysql-backup-cron
 ```
 
@@ -110,6 +112,9 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
 `MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
 
 # Revision History
+- 2.2.0
+  * Accept '/' file separator as PREFIX
+
 - 2.1.0
   * Add `--add-drop-database` to mysqldump
 

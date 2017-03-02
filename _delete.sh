@@ -19,11 +19,8 @@ function list_backup_files {
       swift list $CONTAINER $CONTAINER_PREFIX > ${TMP_OUT}
       ;;
     local)
-      if [ -n "$PREFIX" ]; then
-        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename | grep $PREFIX > ${TMP_OUT}
-      else
-        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename > ${TMP_OUT}
-      fi
+      cd ${BACKUP_DIR}
+      find . -type f -name "*.sql.gz" | grep "^./${PREFIX}" > ${TMP_OUT}
       ;;
   esac
   LATEST_BACKUP=`cat ${TMP_OUT} | grep ${TS_PREFIX} | sort -r | head -1`
