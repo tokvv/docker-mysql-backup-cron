@@ -29,17 +29,15 @@ then
       swift list $CONTAINER $FILE_PREFIX | grep .sql.gz
       ;;
     local)
-      if [ -n "$PREFIX" ]; then
-        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename | grep $PREFIX
-      else
-        ls ${BACKUP_DIR}/*.sql.gz | xargs -n 1 basename
-      fi
+      cd ${BACKUP_DIR}
+      find . -type f -name "*.sql.gz" | grep "^./${PREFIX}"
       ;;
   esac
 
 else
   # Create a temporary directory to hold the backup files
   DIR=$(mktemp -d)
+  FILE_NAME=`basename $1`
 
   case $STORAGE_TYPE in
     s3)
@@ -50,7 +48,7 @@ else
       swift download $CONTAINER $1 --output $DIR/$1
       ;;
     local)
-      cp -f $BACKUP_DIR/$1 $DIR/$1
+      cp -f $BACKUP_DIR/$1 $DIR
       ;;
   esac
 
@@ -59,7 +57,7 @@ else
   MYSQL_ROOT_PASSWORD=${MYSQL_ENV_MYSQL_ROOT_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
 
   # Restore the DB
-  gunzip < $DIR/$1 | mysql -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST
+  gunzip < $DIR/$FILE_NAME | mysql -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST
 
   # Clean up
   rm -rf $DIR
