@@ -29,7 +29,7 @@ fi
 if [ -z "$DBS" ]
 then
   # Backup all DB's in bulk
-  mysqldump -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST --add-drop-database --all-databases $MYSQLDUMP_OPTIONS | gzip > $DIR/${PREFIX}all-databases-$TS.sql.gz
+  mysqldump -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST --add-drop-database --events --all-databases $MYSQLDUMP_OPTIONS | gzip > $DIR/${PREFIX}all-databases-$TS.sql.gz
 else
   # Backup each DB separately
   for DB in $DBS
