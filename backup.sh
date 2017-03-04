@@ -16,6 +16,7 @@ MYSQL_ROOT_PASSWORD=${MYSQL_ENV_MYSQL_ROOT_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
 MYSQLDUMP_OPTIONS=${MYSQLDUMP_OPTIONS:-"--single-transaction=true"}
 
 # Create a temporary directory to hold the backup files.
+find /tmp -type d | grep -v "^/tmp$" | xargs rm -fr
 DIR=$(mktemp -d)
 
 # Generate a timestamp to name the backup files with.

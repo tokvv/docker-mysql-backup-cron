@@ -85,7 +85,7 @@ Use `docker exec <container> /backup.sh` to take an immediate backup.
 
 Use `docker exec <container> /restore.sh` to list available backups to restore
 from. Then `docker exec /restore.sh <filename of backup>` to
-restore it.
+restore it. You can also run `docker exec /restore.sh __latest__` for restoring from the latest backup file.
 
 # Backup
 
@@ -112,6 +112,12 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
 `MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
 
 # Revision History
+- 2.3.0
+  * Fix an issue where —events is missing
+  * Add a new feature to restore from the latest backup file (exit code=1 when nothing to restore from)
+  * Clean temporary directories under `/tmp`
+  * Fix an issue where restore.sh failed to create subdirectories when the prefix contains file separators
+
 - 2.2.1
   * Fix restore.sh
 
