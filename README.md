@@ -112,6 +112,9 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
 `MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
 
 # Revision History
+- 2.3.1
+  * Fix an issue where local restore failed to copy a file when the path contains file separators
+
 - 2.3.0
   * Fix an issue where —events is missing
   * Add a new feature to restore from the latest backup file (exit code=1 when nothing to restore from)
