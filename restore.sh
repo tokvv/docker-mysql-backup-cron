@@ -21,7 +21,7 @@ function restore {
       swift download $CONTAINER $1 --output $DIR/$1
       ;;
     local)
-      cp -f $BACKUP_DIR/$1 $DIR
+      cp -f $BACKUP_DIR/$1 $DIR/$1
       ;;
   esac
 }
