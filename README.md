@@ -116,6 +116,7 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
   * Fix an issue where —events is missing
   * Add a new feature to restore from the latest backup file (exit code=1 when nothing to restore from)
   * Clean temporary directories under `/tmp`
+  * Fix an issue where restore.sh failed to create subdirectories when the prefix contains file separators
 
 - 2.2.1
   * Fix restore.sh
