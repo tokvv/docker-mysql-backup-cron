@@ -20,5 +20,6 @@ COPY rc.local /etc/rc.local
 
 COPY cleanup_daily.sh /etc/cron.daily/cleanup
 
+COPY _list.sh /_list.sh
 COPY _delete.sh /_delete.sh
 COPY _validate.sh /_validate.sh
