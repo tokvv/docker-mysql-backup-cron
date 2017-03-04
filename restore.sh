@@ -36,6 +36,7 @@ then
 
 else
   # Create a temporary directory to hold the backup files
+  find /tmp -type d | grep -v "^/tmp$" | xargs rm -fr
   DIR=$(mktemp -d)
   FILE_NAME=`basename $1`
 
