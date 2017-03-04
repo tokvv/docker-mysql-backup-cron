@@ -16,6 +16,7 @@ MYSQL_ROOT_PASSWORD=${MYSQL_ENV_MYSQL_ROOT_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
 MYSQLDUMP_OPTIONS=${MYSQLDUMP_OPTIONS:-"--single-transaction=true"}
 
 # Create a temporary directory to hold the backup files.
+find /tmp -type d | grep -v "^/tmp$" | xargs rm -fr
 DIR=$(mktemp -d)
 
 # Generate a timestamp to name the backup files with.
@@ -29,7 +30,7 @@ fi
 if [ -z "$DBS" ]
 then
   # Backup all DB's in bulk
-  mysqldump -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST --add-drop-database --all-databases $MYSQLDUMP_OPTIONS | gzip > $DIR/${PREFIX}all-databases-$TS.sql.gz
+  mysqldump -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST --add-drop-database --events --all-databases $MYSQLDUMP_OPTIONS | gzip > $DIR/${PREFIX}all-databases-$TS.sql.gz
 else
   # Backup each DB separately
   for DB in $DBS
