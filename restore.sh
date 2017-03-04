@@ -38,6 +38,10 @@ else
   # Create a temporary directory to hold the backup files
   find /tmp -type d | grep -v "^/tmp$" | xargs rm -fr
   DIR=$(mktemp -d)
+  BASE_DIR=`dirname ${DIR}/${PREFIX}test`
+  if [ ! -d "$BASE_DIR" ]; then
+    mkdir -p $BASE_DIR
+  fi
   BACKUP_FILE_PATH=$1
 
   if [ "${BACKUP_FILE_PATH}" == "__latest__" ]; then
@@ -45,7 +49,6 @@ else
     BACKUP_FILE_PATH=${LATEST_BACKUP}
   fi
 
-  FILE_NAME=`basename ${BACKUP_FILE_PATH}`
   restore ${BACKUP_FILE_PATH}
   echo "${BACKUP_FILE_PATH}"
 
@@ -54,7 +57,7 @@ else
   MYSQL_ROOT_PASSWORD=${MYSQL_ENV_MYSQL_ROOT_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
 
   # Restore the DB
-  gunzip < $DIR/$FILE_NAME | mysql -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST
+  gunzip < $DIR/$BACKUP_FILE_PATH | mysql -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST
 
   # Clean up
   rm -rf $DIR
