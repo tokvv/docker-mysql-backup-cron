@@ -18,6 +18,14 @@ function list_backup_files {
       fi
       swift list $CONTAINER $CONTAINER_PREFIX > ${TMP_OUT}
       ;;
+    gcs)
+      prefix="gs://$GC_BUCKET/"
+      for p in `gsutil ls ${prefix}`; do
+        p2=`echo ${p} | sed "s/${prefix//\//\\/}//g"`
+        # remove gs://bucket-name/
+        echo "${p2}" >> ${TMP_OUT}
+      done
+      ;;
     local)
       cd ${BACKUP_DIR}
       find . -type f -name "*.sql.gz" | grep "^./${PREFIX}" > ${TMP_OUT}
