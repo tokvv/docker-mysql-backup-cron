@@ -38,6 +38,13 @@ The following environment variables must be provided.
 - `OS_AUTH_URL`
 - `CONTAINER`
 
+## Google Cloud Storage (`gcs`)
+
+The following environment variables must be provided.
+
+- `BOTO_PATH`
+- `GC_BUCKET` ... must point to the path to BOTO file (container)
+
 ## Local File System (`local`)
 
 The following environment variable must be provided.

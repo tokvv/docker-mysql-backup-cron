@@ -13,6 +13,12 @@ case $STORAGE_TYPE in
       exit 1
     fi
     ;;
+  gcs)
+    if [ -z "$BOTO_PATH" ] || [ -z "$GC_BUCKET" ]; then
+      echo "[$STORAGE_TYPE] Cannot access to gcs with the given information"
+      exit 1
+    fi
+    ;;
   local)
     if [ ! -d "$BACKUP_DIR" ]; then
       echo "[$STORAGE_TYPE] Cannot backup to the missing directory"

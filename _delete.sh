@@ -10,6 +10,9 @@ function delete {
     swift)
       swift delete $CONTAINER $1
       ;;
+    gcs)
+      gsutil rm -f gs://$GC_BUCKET/$1
+      ;;
     local)
       rm -f ${BACKUP_DIR}/$1
       ;;

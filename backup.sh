@@ -53,6 +53,9 @@ case $STORAGE_TYPE in
       swift upload $CONTAINER ${f}
     done
     ;;
+  gcs)
+    gsutil -m cp -r $DIR gs://$GC_BUCKET
+    ;;
   local)
     # cp the backup files in the temp directory to the backup directory
     cd $DIR

@@ -20,6 +20,9 @@ function restore {
     swift)
       swift download $CONTAINER $1 --output $DIR/$1
       ;;
+    gcs)
+      gsutil cp gs://$GC_BUCKET/$1 $DIR/$1
+      ;;
     local)
       cp -f $BACKUP_DIR/$1 $DIR/$1
       ;;
