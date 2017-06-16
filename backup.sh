@@ -57,7 +57,7 @@ case $STORAGE_TYPE in
     cd $DIR
     for f in `find . -type f -name "*.sql.gz"`
     do
-      gsutil -m cp ${f} gs://$GC_BUCKET
+      gsutil -m cp ${f} gs://$GC_BUCKET/${f}
     done
     ;;
   local)
