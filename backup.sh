@@ -54,7 +54,11 @@ case $STORAGE_TYPE in
     done
     ;;
   gcs)
-    gsutil -m cp -r $DIR gs://$GC_BUCKET
+    cd $DIR
+    for f in `find . -type f -name "*.sql.gz"`
+    do
+      gsutil -m cp ${f} gs://$GC_BUCKET
+    done
     ;;
   local)
     # cp the backup files in the temp directory to the backup directory
