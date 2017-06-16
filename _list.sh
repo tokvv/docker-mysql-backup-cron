@@ -21,7 +21,7 @@ function list_backup_files {
     gcs)
       prefix="gs://$GC_BUCKET/"
       for p in `gsutil ls ${prefix}`; do
-        p2=`echo ${p} | sed "s/${prefix//\//\\/}//g"`
+        p2=$(echo ${p} | sed "s/${prefix//\//\\/}//g")
         # remove gs://bucket-name/
         echo "${p2}" >> ${TMP_OUT}
       done
