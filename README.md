@@ -119,6 +119,9 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
 `MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
 
 # Revision History
+- 2.4.2
+  * Fix sed expression error
+
 - 2.4.1
   * Fix an issue where unexpected dir was created on GCS backup
 
