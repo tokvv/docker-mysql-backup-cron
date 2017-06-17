@@ -19,8 +19,8 @@ function list_backup_files {
       swift list $CONTAINER $CONTAINER_PREFIX > ${TMP_OUT}
       ;;
     gcs)
-      prefix="gs://$GC_BUCKET/${PREFIX}"
-      for p in `gsutil ls -r ${prefix} | grep -v ":$"`; do
+      prefix="gs://$GC_BUCKET/"
+      for p in `gsutil ls -r ${prefix}${PREFIX} | grep -v ":$"`; do
         if [ -z "$p" ]; then
           continue
         fi
