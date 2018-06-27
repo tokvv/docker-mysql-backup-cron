@@ -10,9 +10,9 @@ By default, `MYSQLDUMP_OPTIONS` is assigned to `--single-transaction=true`. You 
 
 The file are `gzip`ed. The optional `PREFIX` can be used for adding the prefix to the backup file name.
 
-If the DB is linked to this container make sure that `MYSQL_ROOT_PASSWORD` is set in the linked mysql container.
+If the DB is linked to this container make sure that `DB_USER` and `DB_PASSWORD` is set in the linked mysql container.
 
-You can use docker network to connect to the DB container with `--net` as well. If you go this way, make sure that both `MYSQL_ROOT_PASSWORD` and `MYSQL_HOST`(container name) are set in this backup container.
+You can use docker network to connect to the DB container with `--net` as well. If you go this way, make sure that both `DB_USER`, `DB_PASSWORD` and `MYSQL_HOST`(container name) are set in this backup container.
 
 You can choose 3 types of backup destination, `s3` for AWS S3, `swift` for OpenStack Object Storage and `local` for local file system.
 
@@ -66,7 +66,8 @@ Schedule UTC 1:00 am, 9:00 am and 5:00 pm per day.
 ```
     docker run -tid --name mysql-backup-cron \
         --net my_network_name \
-        -e MYSQL_ROOT_PASSWORD=my_root_password \
+        -e DB_USER=my_db_user \
+        -e DB_PASSWORD=my_db_password \
         -e MYSQL_HOST=mysql_host \
         -e BACKUP_DIR=/backup \
         -e PREFIX=subdir/here/with-prefix \
@@ -78,7 +79,8 @@ Schedule every 5 minutes.
 ```
     docker run -tid --name mysql-backup-cron \
         --net my_network_name \
-        -e MYSQL_ROOT_PASSWORD=my_root_password \
+        -e DB_USER=my_db_user \
+        -e DB_PASSWORD=my_db_password \
         -e MYSQL_HOST=mysql_host \
         -e BACKUP_DIR=/backup \
         -e CRON_D_BACKUP="*/5 * * * * root /backup.sh | logger" \
@@ -118,45 +120,3 @@ When providing `DAILY_CLEANUP=1`, the following scheduled cleaner is enabled (di
 
 `MAX_DAILY_BACKUP_FILES` is used for specifying the max number of the backup files to be retained.
 
-# Revision History
-- 2.4.5
-  * Fix an issue where the parent paths in the backup file path was unexpectedly removed
-
-- 2.4.4
-  * Fix an issue where ls failed to show files recursively
-
-- 2.4.3
-  * Add a subdirectory path on performing gcs backup
-
-- 2.4.2
-  * Fix sed expression error
-
-- 2.4.1
-  * Fix an issue where unexpected dir was created on GCS backup
-
-- 2.4.0
-  * Add a new storage type, `gcs`
-
-- 2.3.1
-  * Fix an issue where local restore failed to copy a file when the path contains file separators
-
-- 2.3.0
-  * Fix an issue where —events is missing
-  * Add a new feature to restore from the latest backup file (exit code=1 when nothing to restore from)
-  * Clean temporary directories under `/tmp`
-  * Fix an issue where restore.sh failed to create subdirectories when the prefix contains file separators
-
-- 2.2.1
-  * Fix restore.sh
-
-- 2.2.0
-  * Accept '/' file separator as PREFIX
-
-- 2.1.0
-  * Add `--add-drop-database` to mysqldump
-
-- 2.0.0
-  * Add backup cleaner (disabled by default)
-
-- 1.0.0
-  * Initial Release as of the forked version of `docker-mysql-backup-cron`
