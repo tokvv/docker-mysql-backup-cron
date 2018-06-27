@@ -10,7 +10,7 @@ RUN apt-get -qqy update && \
   apt-get -qqy clean && \
   pip install s3cmd python-openstackclient python-swiftclient gsutil
 
-ENV DBS="" MYSQL_HOST="mysql" STORAGE_TYPE="local" PREFIX="" DAILY_CLEANUP="0" MAX_DAILY_BACKUP_FILES="7"
+ENV DBS="" MYSQL_HOST="mysql" STORAGE_TYPE="local" PREFIX="" DAILY_CLEANUP="0" MAX_DAILY_BACKUP_FILES="7" DB_PASSWORD="" DB_USER=""
 ENV ACCESS_KEY="" SECRET_KEY="" BUCKET="" REGION="us-east-1"
 ENV BOTO_PATH="" GC_BUCKET=""
 ENV OS_TENANT_NAME="" OS_USERNAME="" OS_PASSWORD="" CONTAINER="" OS_AUTH_URL=""

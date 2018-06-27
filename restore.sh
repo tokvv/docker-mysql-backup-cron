@@ -57,10 +57,9 @@ else
 
   # Specify mysql host (mysql by default)
   MYSQL_HOST=${MYSQL_HOST:-mysql}
-  MYSQL_ROOT_PASSWORD=${MYSQL_ENV_MYSQL_ROOT_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
 
   # Restore the DB
-  gunzip < $DIR/$BACKUP_FILE_PATH | mysql -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST
+  gunzip < $DIR/$BACKUP_FILE_PATH | mysql -u$DB_USER -p$DB_PASSWORD -h$MYSQL_HOST
 
   # Clean up
   rm -rf $DIR

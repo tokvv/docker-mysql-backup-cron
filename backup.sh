@@ -12,7 +12,6 @@ set -e
 
 # Specify mysql host (mysql by default)
 MYSQL_HOST=${MYSQL_HOST:-mysql}
-MYSQL_ROOT_PASSWORD=${MYSQL_ENV_MYSQL_ROOT_PASSWORD:-${MYSQL_ROOT_PASSWORD}}
 MYSQLDUMP_OPTIONS=${MYSQLDUMP_OPTIONS:-"--single-transaction=true"}
 
 # Create a temporary directory to hold the backup files.
@@ -30,12 +29,12 @@ fi
 if [ -z "$DBS" ]
 then
   # Backup all DB's in bulk
-  mysqldump -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST --add-drop-database --events --all-databases $MYSQLDUMP_OPTIONS | gzip > $DIR/${PREFIX}all-databases-$TS.sql.gz
+  mysqldump -u$DB_USER -p$DB_PASSWORD -h$MYSQL_HOST --add-drop-database --events --all-databases $MYSQLDUMP_OPTIONS | gzip > $DIR/${PREFIX}all-databases-$TS.sql.gz
 else
   # Backup each DB separately
   for DB in $DBS
   do
-    mysqldump -uroot -p$MYSQL_ROOT_PASSWORD -h$MYSQL_HOST --add-drop-database -B $DB $MYSQLDUMP_OPTIONS | gzip > $DIR/$PREFIX$DB-$TS.sql.gz
+    mysqldump -u$DB_USER -p$DB_PASSWORD -h$MYSQL_HOST --add-drop-database -B $DB $MYSQLDUMP_OPTIONS | gzip > $DIR/$PREFIX$DB-$TS.sql.gz
   done
 fi
 
