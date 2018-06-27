@@ -1,4 +1,4 @@
-FROM nickbreen/cron:v1.0.0
+FROM nickbreen/cron:v2.0.0
 
 MAINTAINER Vlad Tokarchuk
 MAINTAINER Vlad Tokarchuk
@@ -8,7 +8,6 @@ RUN apt-get -qqy update && \
     mysql-client apache2-utils python-dev python-pip \
     libffi-dev libssl-dev && \
   apt-get -qqy clean && \
-  pip install --upgrade setuptools &&\
   pip install s3cmd python-openstackclient python-swiftclient gsutil
 
 ENV DBS="" MYSQL_HOST="mysql" STORAGE_TYPE="local" PREFIX="" DAILY_CLEANUP="0" MAX_DAILY_BACKUP_FILES="7" DB_PASSWORD="" DB_USER=""
